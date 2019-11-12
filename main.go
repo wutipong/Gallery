@@ -27,6 +27,7 @@ func main() {
 	e.GET("/", hello)
 	e.GET("/listdir", ListDir)
 	e.GET("/listdir/*", ListDir)
+	e.GET("/getimage/*", GetImage)
 
 	// Start server
 	e.Logger.Fatal(e.Start(*address))

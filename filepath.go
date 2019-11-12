@@ -28,11 +28,13 @@ func init() {
 	}
 }
 
+// FileEntry is an entry of returning record.
 type FileEntry struct {
 	Filename string `json:"filename"`
 	IsDir    bool   `json:"is_dir"`
 }
 
+// ListDir returns a list of content of a directory.
 func ListDir(c echo.Context) error {
 	p, err := url.PathUnescape(c.Param("*"))
 	if err != nil {
@@ -41,25 +43,29 @@ func ListDir(c echo.Context) error {
 
 	fullpath := BaseDirectory + string(os.PathSeparator) + p
 
-	file, err := os.Open(fullpath)
+	dir, err := os.Open(fullpath)
 	if err != nil {
 		return err
 	}
-	dirs, err := file.Readdir(0)
+	children, err := dir.Readdir(0)
 	if err != nil {
 		return err
 	}
 
 	output := []FileEntry{}
 
-	for _, dir := range dirs {
-		if strings.HasPrefix(dir.Name(), ".") {
+	for _, f := range children {
+		if strings.HasPrefix(f.Name(), ".") {
+			continue
+		}
+
+		if !f.IsDir() && !filter(f.Name()) {
 			continue
 		}
 
 		output = append(output, FileEntry{
-			Filename: dir.Name(),
-			IsDir:    dir.IsDir(),
+			Filename: f.Name(),
+			IsDir:    f.IsDir(),
 		})
 	}
 
