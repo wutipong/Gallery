@@ -25,9 +25,12 @@ func main() {
 
 	// Routes
 	e.GET("/", hello)
-	e.GET("/listdir", ListDir)
-	e.GET("/listdir/*", ListDir)
-	e.GET("/getimage/*", GetImage)
+
+	e.GET("/list_dir", ListDir)
+	e.GET("/list_dir/*", ListDir)
+
+	e.GET("/get_image/*", GetImage)
+	e.GET("/get_cover/*", GetCover)
 
 	// Start server
 	e.Logger.Fatal(e.Start(*address))
