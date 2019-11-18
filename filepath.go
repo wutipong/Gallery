@@ -1,14 +1,11 @@
 package main
 
 import (
-	"net/http"
-	"net/url"
 	"os"
 	"strings"
-
-	"github.com/labstack/echo/v4"
 )
 
+//BaseDirectory the data directory
 var BaseDirectory string
 var filter func(path string) bool
 
@@ -35,24 +32,18 @@ type FileEntry struct {
 }
 
 // ListDir returns a list of content of a directory.
-func ListDir(c echo.Context) error {
-	p, err := url.PathUnescape(c.Param("*"))
-	if err != nil {
-		return err
-	}
+func ListDir(p string) (dirs []FileEntry, files []FileEntry, err error) {
 
 	fullpath := BaseDirectory + string(os.PathSeparator) + p
 
 	dir, err := os.Open(fullpath)
 	if err != nil {
-		return err
+		return
 	}
 	children, err := dir.Readdir(0)
 	if err != nil {
-		return err
+		return
 	}
-
-	output := []FileEntry{}
 
 	for _, f := range children {
 		if strings.HasPrefix(f.Name(), ".") {
@@ -63,11 +54,18 @@ func ListDir(c echo.Context) error {
 			continue
 		}
 
-		output = append(output, FileEntry{
-			Filename: f.Name(),
-			IsDir:    f.IsDir(),
-		})
+		if f.IsDir() {
+			dirs = append(dirs, FileEntry{
+				Filename: f.Name(),
+				IsDir:    f.IsDir(),
+			})
+		} else {
+			files = append(files, FileEntry{
+				Filename: f.Name(),
+				IsDir:    f.IsDir(),
+			})
+		}
 	}
 
-	return c.JSON(http.StatusOK, output)
+	return
 }

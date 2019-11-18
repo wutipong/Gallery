@@ -1,9 +1,10 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"net/http"
 
 	"flag"
 	"log"
@@ -25,14 +26,15 @@ func main() {
 
 	// Routes
 	e.GET("/", hello)
+	e.GET("/browse", browse)
+	e.GET("/browse/*", browse)
 
-	e.GET("/list_dir", ListDir)
-	e.GET("/list_dir/*", ListDir)
+	e.Static("/_/static", "static")
 
-	e.GET("/get_image/*", GetImage)
+	e.GET("/_/get_image/*", GetImage)
 
-	e.GET("/get_cover", GetCover)
-	e.GET("/get_cover/*", GetCover)
+	e.GET("/_/get_cover", GetCover)
+	e.GET("/_/get_cover/*", GetCover)
 
 	// Start server
 	e.Logger.Fatal(e.Start(*address))
@@ -40,5 +42,5 @@ func main() {
 
 // Handler
 func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+	return c.Redirect(http.StatusPermanentRedirect, "/browse")
 }
