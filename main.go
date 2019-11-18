@@ -30,6 +30,8 @@ func main() {
 	e.GET("/list_dir/*", ListDir)
 
 	e.GET("/get_image/*", GetImage)
+
+	e.GET("/get_cover", GetCover)
 	e.GET("/get_cover/*", GetCover)
 
 	// Start server
