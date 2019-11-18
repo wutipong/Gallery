@@ -3,34 +3,27 @@ package main
 import (
 	"html/template"
 	"io"
+	"log"
+	"os"
 )
 
 type Header struct {
 	Title string
 }
 
-const (
-	headerTemplateStr string = `<!DOCTYPE html>
-<head>
-<link rel="stylesheet" href="/static/css/bootstrap.min.css" >
-<script src="/static/js/jquery-3.4.1.min.js"></script>
-<script src="/static/js/popper.min.js"></script>
-<title>{{.Title}}</title>
-</head>
-`
-)
+func init() {
+	var err error
+	headerTemplate, err = template.New("header.gohtml").ParseFiles("template/header.gohtml")
+	if err != nil {
+		log.Panic(err)
+		os.Exit(-1)
+	}
+	err = headerTemplate.Execute(os.Stdout, Header{Title: "Test"})
+}
 
 var headerTemplate *template.Template = nil
 
 //WriteHeader write html header.
 func WriteHeader(writer io.Writer, header Header) error {
-	if headerTemplate == nil {
-		var err error
-		headerTemplate, err = template.New("header").Parse(headerTemplateStr)
-		if err != nil {
-			return err
-		}
-	}
-
 	return headerTemplate.Execute(writer, header)
 }
