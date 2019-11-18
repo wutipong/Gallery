@@ -18,7 +18,6 @@ func init() {
 		log.Panic(err)
 		os.Exit(-1)
 	}
-	err = headerTemplate.Execute(os.Stdout, Header{Title: "Test"})
 }
 
 var headerTemplate *template.Template = nil

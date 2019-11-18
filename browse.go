@@ -2,13 +2,32 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 )
+
+var fileItemTemplace *template.Template
+
+func init() {
+	var err error
+	fileItemTemplace, err = template.New("fileitem.gohtml").ParseFiles("template/fileitem.gohtml")
+	if err != nil {
+		log.Panic(err)
+		os.Exit(-1)
+	}
+}
+
+type fileItem struct {
+	ImageURL string
+	Name     string
+}
 
 //WriteBreadcrumb write breadcrumb component.
 func WriteBreadcrumb(writer io.Writer, path string) {
@@ -77,7 +96,7 @@ func WriteFiles(writer io.Writer, path string, files []FileEntry) {
 			url = "/get_image/" + path + "/" + file.Filename
 		}
 
-		io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, file.Filename))
+		fileItemTemplace.Execute(writer, fileItem{ImageURL: url, Name: file.Filename})
 
 		if i%3 == 2 || i == length-1 {
 			io.WriteString(writer, `</div>`)
@@ -105,6 +124,18 @@ func browse(c echo.Context) error {
 	WriteBreadcrumb(&builder, p)
 	WriteDirectories(&builder, p, dirs)
 	WriteFiles(&builder, p, files)
+
+	builder.WriteString(`
+	<script>
+	$(function() {
+		$('.thumb').Lazy({
+			scrollDirection: 'vertical',
+        	effect: 'fadeIn',
+        	visibleOnly: true
+		});
+		
+	});
+	</script>`)
 
 	return c.HTML(http.StatusOK, builder.String())
 }
