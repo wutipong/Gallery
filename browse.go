@@ -34,6 +34,58 @@ func WriteBreadcrumb(writer io.Writer, path string) {
 	io.WriteString(writer, "</nav>")
 }
 
+// WriteDirectories write directory entries.
+func WriteDirectories(writer io.Writer, path string, dirs []FileEntry) {
+	io.WriteString(writer, `<div class="container">`)
+	length := len(dirs)
+	for i := 0; i < length; i++ {
+		dir := dirs[i]
+		if i%3 == 0 {
+			io.WriteString(writer, `<div class="row">`)
+		}
+		var url string
+
+		if path == "" {
+			url = "/browse/" + dir.Filename
+		} else {
+			url = "/browse/" + path + "/" + dir.Filename
+		}
+
+		io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, dir.Filename))
+
+		if i%3 == 2 || i == length-1 {
+			io.WriteString(writer, `</div>`)
+		}
+	}
+	io.WriteString(writer, `</div>`)
+}
+
+// WriteFiles write file entries.
+func WriteFiles(writer io.Writer, path string, files []FileEntry) {
+	io.WriteString(writer, `<div class="container">`)
+	length := len(files)
+	for i := 0; i < length; i++ {
+		file := files[i]
+		if i%3 == 0 {
+			io.WriteString(writer, `<div class="row">`)
+		}
+		var url string
+
+		if path == "" {
+			url = "/get_image/" + file.Filename
+		} else {
+			url = "/get_image/" + path + "/" + file.Filename
+		}
+
+		io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, file.Filename))
+
+		if i%3 == 2 || i == length-1 {
+			io.WriteString(writer, `</div>`)
+		}
+	}
+	io.WriteString(writer, `</div>`)
+}
+
 // Handler
 func browse(c echo.Context) error {
 	builder := strings.Builder{}
@@ -45,14 +97,14 @@ func browse(c echo.Context) error {
 		return err
 	}
 
-	entries, err := ListDir(p)
+	dirs, files, err := ListDir(p)
 	if err != nil {
 		return err
 	}
 
-	entries[0].Filename = "a"
 	WriteBreadcrumb(&builder, p)
-	builder.WriteString("<p>Hello World</p>")
+	WriteDirectories(&builder, p, dirs)
+	WriteFiles(&builder, p, files)
 
 	return c.HTML(http.StatusOK, builder.String())
 }

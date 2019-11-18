@@ -29,12 +29,12 @@ func main() {
 	e.GET("/browse", browse)
 	e.GET("/browse/*", browse)
 
-	e.Static("/_/static", "static")
+	e.Static("/static", "static")
 
-	e.GET("/_/get_image/*", GetImage)
+	e.GET("/get_image/*", GetImage)
 
-	e.GET("/_/get_cover", GetCover)
-	e.GET("/_/get_cover/*", GetCover)
+	e.GET("/get_cover", GetCover)
+	e.GET("/get_cover/*", GetCover)
 
 	// Start server
 	e.Logger.Fatal(e.Start(*address))

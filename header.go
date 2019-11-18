@@ -12,9 +12,9 @@ type Header struct {
 const (
 	headerTemplateStr string = `<!DOCTYPE html>
 <head>
-<link rel="stylesheet" href="_/static/css/bootstrap.min.css" >
-<script src="_/static/js/jquery-3.4.1.min.js"></script>
-<script src="_/static/js/popper.min.js"></script>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" >
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
 <title>{{.Title}}</title>
 </head>
 `
