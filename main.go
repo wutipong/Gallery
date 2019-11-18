@@ -13,6 +13,7 @@ import (
 func main() {
 	address := flag.String("address", ":6969", "Specify the server address")
 	path := flag.String("path", "/data", "Specifiy the image source path")
+	flag.Parse()
 
 	BaseDirectory = *path
 
