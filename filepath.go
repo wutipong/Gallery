@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -29,6 +30,18 @@ func init() {
 type FileEntry struct {
 	Filename string `json:"filename"`
 	IsDir    bool   `json:"is_dir"`
+}
+
+type byName []FileEntry
+
+func (s byName) Len() int {
+	return len(s)
+}
+func (s byName) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+func (s byName) Less(i, j int) bool {
+	return s[i].Filename < s[j].Filename
 }
 
 // ListDir returns a list of content of a directory.
@@ -67,5 +80,11 @@ func ListDir(p string) (dirs []FileEntry, files []FileEntry, err error) {
 		}
 	}
 
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Filename < files[j].Filename
+	})
+	sort.Slice(dirs, func(i, j int) bool {
+		return dirs[i].Filename < dirs[j].Filename
+	})
 	return
 }
