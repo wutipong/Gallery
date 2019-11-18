@@ -11,7 +11,7 @@ import (
 
 func main() {
 	address := flag.String("address", ":6969", "Specify the server address")
-	path := flag.String("path", "C:\\Users\\mr_ta\\Desktop\\testRepo", "Specifiy the image source path")
+	path := flag.String("path", "/data", "Specifiy the image source path")
 
 	BaseDirectory = *path
 
