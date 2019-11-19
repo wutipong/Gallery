@@ -44,9 +44,10 @@ type folderItem struct {
 }
 
 type fileItem struct {
-	Name     string
-	LinkURL  string
-	ThumbURL string
+	Name       string
+	Path       string
+	ImageURL   string
+	StartIndex int
 }
 
 type navItem struct {
@@ -96,12 +97,12 @@ func createFileItems(path string, files []FileEntry) []fileItem {
 	for i, file := range files {
 		var url string
 		if path == "" {
-			url = "/get_image/" + file.Filename
+			url = file.Filename
 		} else {
-			url = "/get_image/" + path + "/" + file.Filename
+			url = path + "/" + file.Filename
 		}
 
-		output[i] = fileItem{Name: file.Filename, LinkURL: url, ThumbURL: url}
+		output[i] = fileItem{Name: file.Filename, Path: path, ImageURL: url, StartIndex: i + 1}
 	}
 	return output
 }
