@@ -2,13 +2,33 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 )
+
+func init() {
+	var err error
+	folderTemplate, err = template.New("folderitem.gohtml").ParseFiles("template/folderitem.gohtml")
+	if err != nil {
+		log.Panic(err)
+		os.Exit(-1)
+	}
+}
+
+var folderTemplate *template.Template = nil
+
+type folderItem struct {
+	Name     string
+	LinkURL  string
+	ThumbURL string
+}
 
 //WriteBreadcrumb write breadcrumb component.
 func WriteBreadcrumb(writer io.Writer, path string) {
@@ -44,14 +64,18 @@ func WriteDirectories(writer io.Writer, path string, dirs []FileEntry) {
 			io.WriteString(writer, `<div class="row">`)
 		}
 		var url string
-
+		var thumbURL string
 		if path == "" {
 			url = "/browse/" + dir.Filename
+			thumbURL = "/get_cover/" + dir.Filename
 		} else {
 			url = "/browse/" + path + "/" + dir.Filename
+			thumbURL = "/get_cover/" + path + "/" + dir.Filename
 		}
 
-		io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, dir.Filename))
+		//io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, dir.Filename))
+
+		folderTemplate.Execute(writer, folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL})
 
 		if i%3 == 2 || i == length-1 {
 			io.WriteString(writer, `</div>`)
