@@ -32,6 +32,9 @@ func main() {
 	e.GET("/browse", browse)
 	e.GET("/browse/*", browse)
 
+	e.GET("/view", view)
+	e.GET("/view/*", view)
+
 	e.Static("/static", "static")
 
 	e.GET("/get_image/*", GetImage)
