@@ -25,6 +25,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	e.Pre(middleware.RemoveTrailingSlash())
+
 	// Routes
 	e.GET("/", hello)
 	e.GET("/browse", browse)
@@ -36,6 +38,9 @@ func main() {
 
 	e.GET("/get_cover", GetCover)
 	e.GET("/get_cover/*", GetCover)
+
+	e.GET("/view", view)
+	e.GET("/view/*", view)
 
 	// Start server
 	e.Logger.Fatal(e.Start(*address))
