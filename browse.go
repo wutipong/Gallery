@@ -20,11 +20,24 @@ func init() {
 		log.Panic(err)
 		os.Exit(-1)
 	}
+
+	fileTemplate, err = template.New("fileitem.gohtml").ParseFiles("template/fileitem.gohtml")
+	if err != nil {
+		log.Panic(err)
+		os.Exit(-1)
+	}
 }
 
 var folderTemplate *template.Template = nil
+var fileTemplate *template.Template = nil
 
 type folderItem struct {
+	Name     string
+	LinkURL  string
+	ThumbURL string
+}
+
+type fileItem struct {
 	Name     string
 	LinkURL  string
 	ThumbURL string
@@ -73,8 +86,6 @@ func WriteDirectories(writer io.Writer, path string, dirs []FileEntry) {
 			thumbURL = "/get_cover/" + path + "/" + dir.Filename
 		}
 
-		//io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, dir.Filename))
-
 		folderTemplate.Execute(writer, folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL})
 
 		if i%3 == 2 || i == length-1 {
@@ -94,14 +105,14 @@ func WriteFiles(writer io.Writer, path string, files []FileEntry) {
 			io.WriteString(writer, `<div class="row">`)
 		}
 		var url string
-
 		if path == "" {
 			url = "/get_image/" + file.Filename
 		} else {
 			url = "/get_image/" + path + "/" + file.Filename
 		}
 
-		io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, file.Filename))
+		//io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, file.Filename))
+		fileTemplate.Execute(writer, fileItem{Name: file.Filename, LinkURL: url, ThumbURL: url})
 
 		if i%3 == 2 || i == length-1 {
 			io.WriteString(writer, `</div>`)
