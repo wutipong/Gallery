@@ -25,9 +25,10 @@ func GetImage(c echo.Context) error {
 	var width, height int64 = 0, 0
 	if w, e := strconv.ParseInt(c.QueryParam("width"), 10, 64); e == nil {
 		width = w
+		height = width
 	}
 
-	if h, e := strconv.ParseInt(c.QueryParam("width"), 10, 64); e == nil {
+	if h, e := strconv.ParseInt(c.QueryParam("height"), 10, 64); e == nil {
 		height = h
 	}
 
