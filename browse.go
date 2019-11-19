@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -13,96 +11,98 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var fileItemTemplace *template.Template
-
 func init() {
 	var err error
-	fileItemTemplace, err = template.New("fileitem.gohtml").ParseFiles("template/fileitem.gohtml")
+	broseTemplate, err = template.New("browse.gohtml").
+		ParseFiles(
+			"template/browse.gohtml",
+			"template/browse-nav.gohtml",
+			"template/fileitem.gohtml",
+			"template/folderitem.gohtml",
+			"template/header.gohtml",
+		)
 	if err != nil {
 		log.Panic(err)
 		os.Exit(-1)
 	}
 }
 
-type fileItem struct {
-	ImageURL string
-	Name     string
+var broseTemplate *template.Template = nil
+
+type browseData struct {
+	Title    string
+	NavItems []navItem
+	Files    []fileItem
+	Dirs     []folderItem
 }
 
-//WriteBreadcrumb write breadcrumb component.
-func WriteBreadcrumb(writer io.Writer, path string) {
-	io.WriteString(writer, "<nav>")
-	io.WriteString(writer, `<ol class="breadcrumb">`)
-	if path == "" {
-		io.WriteString(writer, `<li class="breadcrumb-item active" aria-current="page">Home</li>`)
-	} else {
-		io.WriteString(writer, `<li class="breadcrumb-item active" aria-current="page"><a href="/browse">Home</a></li>`)
+type folderItem struct {
+	Name     string
+	LinkURL  string
+	ThumbURL string
+}
 
+type fileItem struct {
+	Name     string
+	LinkURL  string
+	ThumbURL string
+}
+
+type navItem struct {
+	Name string
+	URL  string
+}
+
+func createBreadcrumb(path string) []navItem {
+	items := []navItem{}
+
+	items = append(items, navItem{
+		Name: "Home",
+		URL:  "/browse",
+	})
+	if path != "" {
 		parts := strings.Split(path, "/")
 		for i, part := range parts {
-			if i == len(parts)-1 {
-				io.WriteString(writer, fmt.Sprintf(`<li class="breadcrumb-item active" aria-current="page">%s</li>`, part))
-			} else {
-				url := strings.Join(parts[0:i+1], "/")
-				url = "/browse/" + url
-				io.WriteString(writer, fmt.Sprintf(`<li class="breadcrumb-item active" aria-current="page"><a href="%s">%s</a></li>`, url, part))
-			}
+			items = append(items, navItem{
+				Name: part,
+				URL:  "/browse/" + PathLevel(path, i+1),
+			})
 		}
 	}
-	io.WriteString(writer, "</ol>")
-	io.WriteString(writer, "</nav>")
+	return items
 }
 
-// WriteDirectories write directory entries.
-func WriteDirectories(writer io.Writer, path string, dirs []FileEntry) {
-	io.WriteString(writer, `<div class="container">`)
-	length := len(dirs)
-	for i := 0; i < length; i++ {
-		dir := dirs[i]
-		if i%3 == 0 {
-			io.WriteString(writer, `<div class="row">`)
-		}
+func createDirectoryItems(path string, dirs []FileEntry) []folderItem {
+	output := make([]folderItem, len(dirs))
+	for i, dir := range dirs {
 		var url string
-
+		var thumbURL string
 		if path == "" {
 			url = "/browse/" + dir.Filename
+			thumbURL = "/get_cover/" + dir.Filename
 		} else {
 			url = "/browse/" + path + "/" + dir.Filename
+			thumbURL = "/get_cover/" + path + "/" + dir.Filename
 		}
 
-		io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, dir.Filename))
-
-		if i%3 == 2 || i == length-1 {
-			io.WriteString(writer, `</div>`)
-		}
+		output[i] = folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL}
 	}
-	io.WriteString(writer, `</div>`)
+	return output
 }
 
-// WriteFiles write file entries.
-func WriteFiles(writer io.Writer, path string, files []FileEntry) {
-	io.WriteString(writer, `<div class="container">`)
-	length := len(files)
-	for i := 0; i < length; i++ {
-		file := files[i]
-		if i%3 == 0 {
-			io.WriteString(writer, `<div class="row">`)
-		}
+func createFileItems(path string, files []FileEntry) []fileItem {
+	output := make([]fileItem, len(files))
+	for i, file := range files {
 		var url string
-
 		if path == "" {
 			url = "/get_image/" + file.Filename
 		} else {
 			url = "/get_image/" + path + "/" + file.Filename
 		}
 
-		fileItemTemplace.Execute(writer, fileItem{ImageURL: url, Name: file.Filename})
-
-		if i%3 == 2 || i == length-1 {
-			io.WriteString(writer, `</div>`)
-		}
+		output[i] = fileItem{Name: file.Filename, LinkURL: url, ThumbURL: url}
 	}
-	io.WriteString(writer, `</div>`)
+	return output
 }
 
 // Handler
@@ -120,22 +120,17 @@ func browse(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-
-	WriteBreadcrumb(&builder, p)
-	WriteDirectories(&builder, p, dirs)
-	WriteFiles(&builder, p, files)
-
-	builder.WriteString(`
-	<script>
-	$(function() {
-		$('.thumb').Lazy({
-			scrollDirection: 'vertical',
-        	effect: 'fadeIn',
-        	visibleOnly: true
-		});
-		
-	});
-	</script>`)
+	data := browseData{
+		Title:    "View",
+		NavItems: createBreadcrumb(p),
+		Files:    createFileItems(p, files),
+		Dirs:     createDirectoryItems(p, dirs),
+	}
+	err = broseTemplate.Execute(&builder, data)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	return c.HTML(http.StatusOK, builder.String())
 }

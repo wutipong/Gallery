@@ -88,3 +88,11 @@ func ListDir(p string) (dirs []FileEntry, files []FileEntry, err error) {
 	})
 	return
 }
+
+func PathLevel(path string, level int) string {
+	parts := strings.Split(path, "/")
+	if level > len(parts) {
+		level = len(parts)
+	}
+	return strings.Join(parts[0:level], "/")
+}

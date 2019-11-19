@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"image/jpeg"
 	_ "image/png"
@@ -31,7 +30,9 @@ func findCover(files []os.FileInfo) os.FileInfo {
 		if f.IsDir() {
 			continue
 		}
-
+		if !filter(f.Name()) {
+			continue
+		}
 		return f
 	}
 
@@ -67,7 +68,7 @@ func GetCover(c echo.Context) error {
 	cover := findCover(children)
 
 	if cover == nil {
-		return fmt.Errorf("No cover found")
+		return c.File("static/img/notfound_thumb.png")
 	}
 
 	coverPath := fullpath + string(os.PathSeparator) + cover.Name()

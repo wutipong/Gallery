@@ -25,6 +25,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	e.Pre(middleware.RemoveTrailingSlash())
+
 	// Routes
 	e.GET("/", hello)
 	e.GET("/browse", browse)

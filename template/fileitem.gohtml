@@ -1,7 +1,13 @@
+{{define "file-item"}}
+
 <div class="col">
-    <div class="thumb-div">
-    <a href="{{.ImageURL}}">
-        <img class="thumb" src="/static/img/loading.gif" data-src="{{.ImageURL}}?width=300" alt="{{.Name}}">
+    <a href="{{.LinkURL}}">
+        <div class="file-border">
+            <div class="file-thumb-div">
+                <img class="file-thumb lazy" src ="/static/img/loading.gif" data-src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
+                </div>
+            <span class="file-thumb-name">{{.Name}}</span>
+        </div>
     </a>
-    </div>
 </div>
+{{end}}
