@@ -2,7 +2,6 @@ package main
 
 import (
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -14,28 +13,28 @@ import (
 
 func init() {
 	var err error
-	folderTemplate, err = template.New("folderitem.gohtml").ParseFiles("template/folderitem.gohtml")
-	if err != nil {
-		log.Panic(err)
-		os.Exit(-1)
-	}
-
-	fileTemplate, err = template.New("fileitem.gohtml").ParseFiles("template/fileitem.gohtml")
-	if err != nil {
-		log.Panic(err)
-		os.Exit(-1)
-	}
-
-	navTemplate, err = template.New("browse-nav.gohtml").ParseFiles("template/browse-nav.gohtml")
+	broseTemplate, err = template.New("browse.gohtml").
+		ParseFiles(
+			"template/browse.gohtml",
+			"template/browse-nav.gohtml",
+			"template/fileitem.gohtml",
+			"template/folderitem.gohtml",
+			"template/header.gohtml",
+		)
 	if err != nil {
 		log.Panic(err)
 		os.Exit(-1)
 	}
 }
 
-var folderTemplate *template.Template = nil
-var fileTemplate *template.Template = nil
-var navTemplate *template.Template = nil
+var broseTemplate *template.Template = nil
+
+type browseData struct {
+	Title    string
+	NavItems []navItem
+	Files    []fileItem
+	Dirs     []folderItem
+}
 
 type folderItem struct {
 	Name     string
@@ -54,8 +53,7 @@ type navItem struct {
 	URL  string
 }
 
-//WriteBreadcrumb write breadcrumb component.
-func WriteBreadcrumb(writer io.Writer, path string) {
+func createBreadcrumb(path string) []navItem {
 	items := []navItem{}
 
 	items = append(items, navItem{
@@ -71,19 +69,12 @@ func WriteBreadcrumb(writer io.Writer, path string) {
 			})
 		}
 	}
-
-	navTemplate.Execute(writer, struct{ NavItems []navItem }{NavItems: items})
+	return items
 }
 
-// WriteDirectories write directory entries.
-func WriteDirectories(writer io.Writer, path string, dirs []FileEntry) {
-	io.WriteString(writer, `<div class="container">`)
-	length := len(dirs)
-	for i := 0; i < length; i++ {
-		dir := dirs[i]
-		if i%3 == 0 {
-			io.WriteString(writer, `<div class="row">`)
-		}
+func createDirectoryItems(path string, dirs []FileEntry) []folderItem {
+	output := make([]folderItem, len(dirs))
+	for i, dir := range dirs {
 		var url string
 		var thumbURL string
 		if path == "" {
@@ -94,24 +85,14 @@ func WriteDirectories(writer io.Writer, path string, dirs []FileEntry) {
 			thumbURL = "/get_cover/" + path + "/" + dir.Filename
 		}
 
-		folderTemplate.Execute(writer, folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL})
-
-		if i%3 == 2 || i == length-1 {
-			io.WriteString(writer, `</div>`)
-		}
+		output[i] = folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL}
 	}
-	io.WriteString(writer, `</div>`)
+	return output
 }
 
-// WriteFiles write file entries.
-func WriteFiles(writer io.Writer, path string, files []FileEntry) {
-	io.WriteString(writer, `<div class="container">`)
-	length := len(files)
-	for i := 0; i < length; i++ {
-		file := files[i]
-		if i%3 == 0 {
-			io.WriteString(writer, `<div class="row">`)
-		}
+func createFileItems(path string, files []FileEntry) []fileItem {
+	output := make([]fileItem, len(files))
+	for i, file := range files {
 		var url string
 		if path == "" {
 			url = "/get_image/" + file.Filename
@@ -119,14 +100,9 @@ func WriteFiles(writer io.Writer, path string, files []FileEntry) {
 			url = "/get_image/" + path + "/" + file.Filename
 		}
 
-		//io.WriteString(writer, fmt.Sprintf(`<div class="col"><a href="%s">%s</a></div>`, url, file.Filename))
-		fileTemplate.Execute(writer, fileItem{Name: file.Filename, LinkURL: url, ThumbURL: url})
-
-		if i%3 == 2 || i == length-1 {
-			io.WriteString(writer, `</div>`)
-		}
+		output[i] = fileItem{Name: file.Filename, LinkURL: url, ThumbURL: url}
 	}
-	io.WriteString(writer, `</div>`)
+	return output
 }
 
 // Handler
@@ -140,19 +116,21 @@ func browse(c echo.Context) error {
 		return err
 	}
 
-	if strings.HasSuffix(p, "/") {
-		p = p[0 : len(p)-1]
-		return c.Redirect(http.StatusPermanentRedirect, "/browse/"+p)
-	}
-
 	dirs, files, err := ListDir(p)
 	if err != nil {
 		return err
 	}
-
-	WriteBreadcrumb(&builder, p)
-	WriteDirectories(&builder, p, dirs)
-	WriteFiles(&builder, p, files)
+	data := browseData{
+		Title:    "View",
+		NavItems: createBreadcrumb(p),
+		Files:    createFileItems(p, files),
+		Dirs:     createDirectoryItems(p, dirs),
+	}
+	err = broseTemplate.Execute(&builder, data)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	return c.HTML(http.StatusOK, builder.String())
 }
