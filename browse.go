@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -109,8 +110,6 @@ func createFileItems(path string, files []FileEntry) []fileItem {
 func browse(c echo.Context) error {
 	builder := strings.Builder{}
 
-	WriteHeader(&builder, Header{Title: "Hello"})
-
 	p, err := url.PathUnescape(c.Param("*"))
 	if err != nil {
 		return err
@@ -121,7 +120,7 @@ func browse(c echo.Context) error {
 		return err
 	}
 	data := browseData{
-		Title:    "View",
+		Title:    fmt.Sprintf("Gallery - Browsing [%s]", p),
 		NavItems: createBreadcrumb(p),
 		Files:    createFileItems(p, files),
 		Dirs:     createDirectoryItems(p, dirs),
