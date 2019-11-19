@@ -1,0 +1,31 @@
+.folder-border {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+}
+
+.folder-thumb-div{
+    width: 100%;
+    height: 100%;
+}
+
+.folder-thumb-name {
+    margin-top: auto;
+}
+
+.file-border {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+}
+
+.file-thumb-div{
+    width: 100%;
+    height: 100%;
+}
+
+.file-thumb-name {
+    margin-top: auto;
+}
