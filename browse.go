@@ -24,7 +24,7 @@ func WriteBreadcrumb(writer io.Writer, path string) {
 			if i == len(parts)-1 {
 				io.WriteString(writer, fmt.Sprintf(`<li class="breadcrumb-item active" aria-current="page">%s</li>`, part))
 			} else {
-				url := strings.Join(parts[0:i+1], "/")
+				url := PathLevel(path, i+1)
 				url = "/browse/" + url
 				io.WriteString(writer, fmt.Sprintf(`<li class="breadcrumb-item active" aria-current="page"><a href="%s">%s</a></li>`, url, part))
 			}
@@ -95,6 +95,11 @@ func browse(c echo.Context) error {
 	p, err := url.PathUnescape(c.Param("*"))
 	if err != nil {
 		return err
+	}
+
+	if strings.HasSuffix(p, "/") {
+		p = p[0 : len(p)-1]
+		return c.Redirect(http.StatusPermanentRedirect, "/browse/"+p)
 	}
 
 	dirs, files, err := ListDir(p)
