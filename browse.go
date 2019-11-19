@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"io"
 	"log"
@@ -26,10 +25,17 @@ func init() {
 		log.Panic(err)
 		os.Exit(-1)
 	}
+
+	navTemplate, err = template.New("browse-nav.gohtml").ParseFiles("template/browse-nav.gohtml")
+	if err != nil {
+		log.Panic(err)
+		os.Exit(-1)
+	}
 }
 
 var folderTemplate *template.Template = nil
 var fileTemplate *template.Template = nil
+var navTemplate *template.Template = nil
 
 type folderItem struct {
 	Name     string
@@ -43,28 +49,30 @@ type fileItem struct {
 	ThumbURL string
 }
 
+type navItem struct {
+	Name string
+	URL  string
+}
+
 //WriteBreadcrumb write breadcrumb component.
 func WriteBreadcrumb(writer io.Writer, path string) {
-	io.WriteString(writer, "<nav>")
-	io.WriteString(writer, `<ol class="breadcrumb">`)
-	if path == "" {
-		io.WriteString(writer, `<li class="breadcrumb-item active" aria-current="page">Home</li>`)
-	} else {
-		io.WriteString(writer, `<li class="breadcrumb-item active" aria-current="page"><a href="/browse">Home</a></li>`)
+	items := []navItem{}
 
+	items = append(items, navItem{
+		Name: "Home",
+		URL:  "/browse",
+	})
+	if path != "" {
 		parts := strings.Split(path, "/")
 		for i, part := range parts {
-			if i == len(parts)-1 {
-				io.WriteString(writer, fmt.Sprintf(`<li class="breadcrumb-item active" aria-current="page">%s</li>`, part))
-			} else {
-				url := PathLevel(path, i+1)
-				url = "/browse/" + url
-				io.WriteString(writer, fmt.Sprintf(`<li class="breadcrumb-item active" aria-current="page"><a href="%s">%s</a></li>`, url, part))
-			}
+			items = append(items, navItem{
+				Name: part,
+				URL:  "/browse/" + PathLevel(path, i+1),
+			})
 		}
 	}
-	io.WriteString(writer, "</ol>")
-	io.WriteString(writer, "</nav>")
+
+	navTemplate.Execute(writer, struct{ NavItems []navItem }{NavItems: items})
 }
 
 // WriteDirectories write directory entries.
