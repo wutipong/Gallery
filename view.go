@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -27,6 +28,13 @@ func init() {
 
 var viewTemplate *template.Template = nil
 
+type viewData struct {
+	Title      string
+	BrowseURL  string
+	ImageURLs  []string
+	StartIndex int64
+}
+
 func view(c echo.Context) error {
 	builder := strings.Builder{}
 
@@ -35,15 +43,21 @@ func view(c echo.Context) error {
 		return err
 	}
 
-	dirs, files, err := ListDir(p)
+	_, files, err := ListDir(p)
 	if err != nil {
 		return err
 	}
-	data := browseData{
-		Title:    fmt.Sprintf("Gallery - Viewing [%s]", p),
-		NavItems: createBreadcrumb(p),
-		Files:    createFileItems(p, files),
-		Dirs:     createDirectoryItems(p, dirs),
+
+	var startIndex int64 = 1
+	if i, e := strconv.ParseInt(c.QueryParam("index"), 10, 64); e == nil {
+		startIndex = i
+	}
+
+	data := viewData{
+		Title:      fmt.Sprintf("Gallery - Viewing [%s]", p),
+		BrowseURL:  "/browse/" + p,
+		ImageURLs:  createImageURLs(p, files),
+		StartIndex: startIndex,
 	}
 	err = viewTemplate.Execute(&builder, data)
 	if err != nil {
@@ -52,4 +66,19 @@ func view(c echo.Context) error {
 	}
 
 	return c.HTML(http.StatusOK, builder.String())
+}
+
+func createImageURLs(path string, files []FileEntry) []string {
+	output := make([]string, len(files))
+	for i, file := range files {
+		var url string
+		if path == "" {
+			url = "/get_image/" + file.Filename
+		} else {
+			url = "/get_image/" + path + "/" + file.Filename
+		}
+
+		output[i] = url
+	}
+	return output
 }
