@@ -2,3 +2,4 @@ gallery.exe
 gallery
 .vscode/launch.json
 go.sum
+*.bak
