@@ -3,13 +3,17 @@
 {{template "breadcrumb" .}}
 
 <div class="container">
-{{range .Dirs}}
-    {{template "folder-item" .}}
-{{end}}
+    <div class="row">
+    {{range .Dirs}}
+        {{template "folder-item" .}}
+    {{end}}
+    </div>
 </div>
 
 <div class="container">
-{{range .Files }}
-    {{template "file-item" .}}
-{{end}}
+    <div class="row">
+    {{range .Files }}
+        {{template "file-item" .}}
+    {{end}}
+    <div class="row">
 </div>
