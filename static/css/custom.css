@@ -1,8 +1,13 @@
 .folder-border {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 200px;
     height: 200px;
+    margin: 20px;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 10%, 30% 10%, 30% 0%);
+    background: black;
+    filter: saturate(50%);
 }
 
 .folder-thumb-div{
@@ -12,6 +17,11 @@
 
 .folder-thumb-name {
     margin-top: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    z-index: 1;
 }
 
 .file-border {
@@ -28,4 +38,9 @@
 
 .file-thumb-name {
     margin-top: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    z-index: 1;
 }
