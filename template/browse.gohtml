@@ -1,0 +1,19 @@
+{{template "html-head" .}}
+
+{{template "breadcrumb" .}}
+
+<div class="container">
+    <div class="row">
+    {{range .Dirs}}
+        {{template "folder-item" .}}
+    {{end}}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+    {{range .Files }}
+        {{template "file-item" .}}
+    {{end}}
+    <div class="row">
+</div>
