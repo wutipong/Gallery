@@ -43,7 +43,6 @@ body {
     height: 250px;
     margin: 20px;
     background: black;
-    filter: saturate(50%);
 }
 
 .file-thumb-name {
@@ -58,4 +57,9 @@ body {
 
 .file-thumb {
     margin: auto;
+}
+
+#carouselControl {
+    height: 90vh;
+    max-height: 100%;
 }

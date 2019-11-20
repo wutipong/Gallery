@@ -12,6 +12,7 @@
         </div>
     </nav>
 
+ 
     <div class="carousel slide" id="carouselControl">
         <div class="carousel-inner" id="carousel">
             {{range .ImageURLs}}
@@ -31,7 +32,6 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-
     <script>
     $(function() {
         $('.lazy').Lazy();
@@ -39,24 +39,6 @@
             interval: false
         })
         $('.carousel-item:nth-child({{.StartIndex}})').addClass('active');
-
-        var carouselHeight = $('#carouselControl').height();
-        $('#carousel').height(carouselHeight);
-
-        $(window).on('resize', function(){
-            resize();
-        })
-
-        resize();
     });
-    function resize(){
-        let screenHeight = $('.fullscreen').height();
-            let navHeight = $('.navbar').height();
-
-            let carouselHeight = screenHeight - navHeight - 32;
-
-            $('#carouselControl').height(carouselHeight);
-            $('#carousel').height(carouselHeight);
-    }
     </script>
 </div>
