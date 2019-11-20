@@ -1,6 +1,14 @@
 body {
     font-family: 'Source Sans Pro', 'Source Han Sans', sans-serif !important;
-  }
+}
+
+.fullscreen {
+    position: absolute;
+    top:0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
 
 .folder-border {
     display: flex;
@@ -9,7 +17,6 @@ body {
     width: 200px;
     height: 250px;
     margin: 20px;
-    /* clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 10%, 70% 10%, 70% 0%);*/
     background: black;
 }
 

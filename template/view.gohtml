@@ -1,42 +1,62 @@
 {{template "html-head" .}}
 
-<nav class="navbar navbar-expand-lg">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="{{.BrowseURL}}"> Back</a>
-        </li>
-    </ul>
-    <div class="my-2 my-lg-0">
-      <button class="btn my-2 my-sm-0 btn-primary">Download</button>
-    </div>
-</nav>
+<div class="fullscreen">
+    <nav class="navbar navbar-expand-lg">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{.BrowseURL}}"> Back</a>
+            </li>
+        </ul>
+        <div class="my-2 my-lg-0">
+        <button class="btn my-2 my-sm-0 btn-primary">Download</button>
+        </div>
+    </nav>
 
-<div class="carousel slide" id="carouselControl">
-    <div class="carousel-inner" >
-        {{range .ImageURLs}}
-            <div class="carousel-item"> 
-                <div class="w-100 d-flex flex-col">
-                    <img class="lazy ml-auto mr-auto" src ="/static/img/loading.gif" data-src="{{.}}?width=1600&height=900">
+    <div class="carousel slide" id="carouselControl">
+        <div class="carousel-inner" id="carousel">
+            {{range .ImageURLs}}
+                <div class="carousel-item"> 
+                    <div class="w-100 d-flex flex-col">
+                        <img class="lazy ml-auto mr-auto" src ="/static/img/loading.gif" data-src="{{.}}?width=1600&height=1600">
+                    </div>
                 </div>
-            </div>
-        {{end}}
+            {{end}}
+        </div>
+        <a class="carousel-control-prev" href="#carouselControl" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselControl" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-    <a class="carousel-control-prev" href="#carouselControl" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselControl" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
 
-<script>
-$(function() {
-    $('.lazy').Lazy();
-    $('.carousel').carousel({
-        interval: false
-    })
-    $('.carousel-item:nth-child({{.StartIndex}})').addClass('active');
-});
-</script>
+    <script>
+    $(function() {
+        $('.lazy').Lazy();
+        $('.carousel').carousel({
+            interval: false
+        })
+        $('.carousel-item:nth-child({{.StartIndex}})').addClass('active');
+
+        var carouselHeight = $('#carouselControl').height();
+        $('#carousel').height(carouselHeight);
+
+        $(window).on('resize', function(){
+            resize();
+        })
+
+        resize();
+    });
+    function resize(){
+        let screenHeight = $('.fullscreen').height();
+            let navHeight = $('.navbar').height();
+
+            let carouselHeight = screenHeight - navHeight - 32;
+
+            $('#carouselControl').height(carouselHeight);
+            $('#carousel').height(carouselHeight);
+    }
+    </script>
+</div>
