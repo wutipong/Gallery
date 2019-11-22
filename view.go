@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"text/template"
 
 	"github.com/labstack/echo/v4"
 )
