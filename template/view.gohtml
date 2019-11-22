@@ -32,11 +32,11 @@
         {{end}}]
 
         $('#carouselControl').on('slide.bs.carousel', function (e) {
-            $('#download-btn').attr("href", imgUrls[e.to])
+            $('#download-btn').attr("href", imgUrls[e.to -1])
         })
 
         $('.carousel-item:nth-child({{.StartIndex}})').addClass('active');
-        $('#download-btn').attr("href", imgUrls[{{.StartIndex}}])
+        $('#download-btn').attr("href", imgUrls[{{.StartIndex}} -1])
     });
     </script>
 </div>
