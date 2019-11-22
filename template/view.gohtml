@@ -33,9 +33,18 @@
 
         $('#carouselControl').on('slide.bs.carousel', function (e) {
             $('#download-btn').attr("href", imgUrls[e.to -1])
+            var url = window.location.origin + window.location.pathname + "#" + (e.to +1);
+            history.pushState(null, '', url);
         })
 
-        $('.carousel-item:nth-child({{.StartIndex}})').addClass('active');
+        let indexStr = window.location.hash.substr(1);
+        let index = parseInt(indexStr)
+        if(!index || index < 1){
+            index = 1
+        }
+        let sel = '.carousel-item:nth-child(' + index + ')'
+
+        $(sel).addClass('active');
         $('#download-btn').attr("href", imgUrls[{{.StartIndex}} -1])
     });
     </script>
