@@ -1,16 +1,5 @@
 {{template "html-head" .}}
 
-<nav class="navbar navbar-expand-lg">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="{{.BrowseURL}}"> Back</a>
-        </li>
-    </ul>
-    <div class="my-2 my-lg-0">
-    <button class="btn my-2 my-sm-0 btn-primary">Download</button>
-    </div>
-</nav>
-
  <div class="fullscreen" style="padding-top:60px;">
     <div class="carousel slide w-100 h-100" id="carouselControl">
         <div class="carousel-inner w-100 h-100" id="carousel" style="width:100%; height:100%;">
@@ -37,7 +26,28 @@
         $('.carousel').carousel({
             interval: false
         })
+        
+        let imgUrls = [{{range .ImageURLs}}
+            "{{.}}",
+        {{end}}]
+
+        $('#carouselControl').on('slide.bs.carousel', function (e) {
+            $('#download-btn').attr("href", imgUrls[e.to])
+        })
+
         $('.carousel-item:nth-child({{.StartIndex}})').addClass('active');
+        $('#download-btn').attr("href", imgUrls[{{.StartIndex}}])
     });
     </script>
 </div>
+
+<nav class="navbar fixed-top navbar-expand-lg">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="{{.BrowseURL}}"> Back</a>
+        </li>
+    </ul>
+    <div class="my-2 my-lg-0">
+    <a id="download-btn" class="btn my-2 my-sm-0 btn-primary">Download</a>
+    </div>
+</nav>
