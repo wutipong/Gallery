@@ -1,11 +1,24 @@
 {{template "html-head" .}}
 
-{{template "breadcrumb" .}}
+<nav>
+<ol class="breadcrumb">
+{{range .NavItems}}
+    <li class="breadcrumb-item" aria-current="page"><a href="{{.URL}}">{{.Name}}</a></li>
+{{end}}
+</ol>
+</nav>
 
 <div class="container">
     <div class="row">
     {{range .Dirs}}
-        {{template "folder-item" .}}
+        <div class="col">
+            <a href="{{.LinkURL}}">
+                <div class="folder-border">
+                    <img class="folder-thumb lazy" src ="/static/img/loading.gif" data-src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
+                    <span class="folder-thumb-name"><span class="oi oi-folder"></span>{{.Name}}</span>
+                </div>
+            </a>
+        </div>
     {{end}}
     </div>
 </div>
@@ -13,7 +26,14 @@
 <div class="container">
     <div class="row">
     {{range .Files }}
-        {{template "file-item" .}}
+        <div class="col">
+            <a href="/view/{{.Path}}?index={{.StartIndex}}">
+                <div class="file-border">
+                    <img class="file-thumb lazy" src ="/static/img/loading.gif" data-src="/get_image/{{.ImageURL}}?width=200" alt="{{.Name}}">
+                    <span class="file-thumb-name"><span class="oi oi-image"></span>{{.Name}}</span>
+                </div>
+            </a>
+        </div>
     {{end}}
-    <div class="row">
+    </div>
 </div>

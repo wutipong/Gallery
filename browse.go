@@ -17,9 +17,6 @@ func init() {
 	broseTemplate, err = template.New("browse.gohtml").
 		ParseFiles(
 			"template/browse.gohtml",
-			"template/browse-nav.gohtml",
-			"template/fileitem.gohtml",
-			"template/folderitem.gohtml",
 			"template/header.gohtml",
 		)
 	if err != nil {

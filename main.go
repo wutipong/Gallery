@@ -11,13 +11,16 @@ import (
 )
 
 func main() {
-	address := flag.String("address", ":6969", "Specify the server address")
-	path := flag.String("path", "/data", "Specifiy the image source path")
+	address := flag.String("address", ":6969", "The server address")
+	path := flag.String("path", "/data", "Image source path")
+	prefix := flag.String("prefix", "*", "Url prefix")
+
 	flag.Parse()
 
 	BaseDirectory = *path
 
 	log.Printf("Image Source Path: %s", *path)
+	log.Printf("using prefix %s", *prefix)
 	// Echo instance
 	e := echo.New()
 
@@ -26,6 +29,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.Pre(middleware.RemoveTrailingSlash())
+	e.Pre(middleware.Rewrite(map[string]string{
+		*prefix: "$1",
+	}))
 
 	// Routes
 	e.GET("/", hello)
