@@ -52,12 +52,8 @@
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand mr-auto text-truncate h1">{{.Name}}</span>
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="{{.BrowseURL}}"> Back</a>
-        </li>
-    </ul>
     <div class="my-2 my-lg-0">
-    <a id="download-btn" class="btn my-2 my-sm-0 btn-primary" download>Download</a>
+        <a id="download-btn" class="btn my-2 my-sm-0 btn-primary" download>Download</a>
+        <a id="close-btn" class="btn btn-danger" href="{{.BrowseURL}}"> Close</a>
     </div>
 </nav>
