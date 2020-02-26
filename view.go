@@ -29,6 +29,7 @@ func init() {
 var viewTemplate *template.Template = nil
 
 type viewData struct {
+	Name       string
 	Title      string
 	BrowseURL  string
 	ImageURLs  []string
@@ -54,6 +55,7 @@ func view(c echo.Context) error {
 	}
 
 	data := viewData{
+		Name: 		p,
 		Title:      fmt.Sprintf("Gallery - Viewing [%s]", p),
 		BrowseURL:  "/browse/" + p,
 		ImageURLs:  createImageURLs(p, files),
