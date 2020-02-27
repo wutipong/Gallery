@@ -1,7 +1,7 @@
 {{template "html-head" .}}
 
-<nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
-   <ol class="breadcrumb">
+<nav class="navbar navbar-dark bg-dark sticky-top navbar-expand-lg">
+   <ol class="breadcrumb mr-auto">
         {{range .NavItems}}
             <li class="breadcrumb-item" aria-current="page"><a href="{{.URL}}">{{.Name}}</a></li>
         {{end}}
