@@ -15,28 +15,33 @@ import (
 	"github.com/nfnt/resize"
 )
 
+var coverNames = []string{"cover", "model", "poster", "folder", "thumb"}
+
 func findCover(files []os.FileInfo) os.FileInfo {
+	var first os.FileInfo = nil
+
 	for _, f := range files {
 		if f.IsDir() {
 			continue
 		}
 
-		name := strings.ToLower(f.Name())
-		if strings.Contains(name, "cover") {
-			return f
-		}
-	}
-	for _, f := range files {
-		if f.IsDir() {
-			continue
-		}
 		if !filter(f.Name()) {
 			continue
 		}
-		return f
-	}
 
-	return nil
+		if first == nil {
+			first = f
+		}
+
+		name := strings.ToLower(f.Name())
+		for _, coverName := range coverNames {
+			if strings.Contains(name, coverName) {
+				return f
+			}
+		}
+
+	}
+	return first
 }
 
 // GetCover returns a cover image with specific width/height while retains aspect ratio.
