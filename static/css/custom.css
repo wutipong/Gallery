@@ -40,6 +40,13 @@ body {
     margin: auto;
 }
 
+.folder-thumb-border {
+    margin: 4px;
+    width: 200px;
+    height: 200px;
+    background: url("static/img/loading.gif") no-repeat fixed center;
+}
+
 .file-border {
     display: flex;
     flex-direction: row;
@@ -67,6 +74,13 @@ body {
     margin: 4px;
     max-width: 200px;
     max-height: 200px;
+}
+
+.file-thumb-border {
+    margin: 4px;
+    width: 200px;
+    height: 200px;
+    background: url("static/img/loading.gif") no-repeat fixed center;
 }
 
 .file-details {
