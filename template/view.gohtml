@@ -6,7 +6,7 @@
             {{range .ImageURLs}}
                 <div class="carousel-item w-100 h-100"> 
                     <div class="w-100 h-100 d-flex flex-col">
-                        <img class="lazy ml-auto mr-auto" src ="/static/img/loading.gif" data-src="{{.}}?width=1600&height=1600" style="object-fit:contain;">
+                        <img class="ml-auto mr-auto" src="{{.}}?width=1600&height=1600" style="object-fit:contain;">
                     </div>
                 </div>
             {{end}}
@@ -22,7 +22,6 @@
     </div>
     <script>
     $(function() {
-        $('.lazy').Lazy();
         $('.carousel').carousel({
             interval: false
         })
