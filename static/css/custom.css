@@ -80,7 +80,7 @@ body {
     margin: 4px;
     width: 200px;
     height: 200px;
-    background: url("static/img/loading.gif") no-repeat fixed center;
+    background: url("../img/loading.gif") no-repeat fixed center;
 }
 
 .file-details {
