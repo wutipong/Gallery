@@ -36,8 +36,7 @@ body {
     font-weight: bold;
 }
 
-.folder-thumb-name > img {
-    fill: #00bc8c;
+.folder-thumb-name > svg {
     width: 1em;
     height: 1em;
     margin: 4px;
@@ -77,8 +76,7 @@ body {
     z-index: 1;
 }
 
-.file-thumb-name > img {
-    fill: #00bc8c;
+.file-thumb-name > svg {
     width: 1em;
     height: 1em;
     margin: 4px;
