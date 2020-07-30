@@ -52,7 +52,7 @@ body {
 }
 
 .folder-thumb-border {
-    background: url("../img/loading.gif") no-repeat;
+    background: url("../img/loading.gif") no-repeat center;
     border: 1px solid white;
 }
 
@@ -95,7 +95,7 @@ body {
 }
 
 .file-thumb-border {
-    background: url("../img/loading.gif") no-repeat;
+    background: url("../img/loading.gif") no-repeat center;
     border: 1px solid white;
 }
 
