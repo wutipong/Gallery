@@ -36,7 +36,9 @@ body {
     font-weight: bold;
 }
 
-.folder-thumb-name > svg {
+.folder-thumb-name > img {
+    filter: invert(100%);
+    fill: #00bc8c;
     width: 1em;
     height: 1em;
     margin: 4px;
@@ -76,7 +78,9 @@ body {
     z-index: 1;
 }
 
-.file-thumb-name > svg {
+.file-thumb-name > img {
+    filter: invert(100%);
+    fill: #00bc8c;
     width: 1em;
     height: 1em;
     margin: 4px;
