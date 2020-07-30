@@ -37,6 +37,7 @@ body {
 }
 
 .folder-thumb-name > img {
+    fill: #00bc8c;
     width: 1em;
     height: 1em;
     margin: 4px;
@@ -77,6 +78,7 @@ body {
 }
 
 .file-thumb-name > img {
+    fill: #00bc8c;
     width: 1em;
     height: 1em;
     margin: 4px;
