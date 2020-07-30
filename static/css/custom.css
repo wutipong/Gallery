@@ -53,7 +53,7 @@ body {
 
 .folder-thumb-border {
     background: url("../img/loading.gif") no-repeat center;
-    border: 1px solid white;
+    border: 1px solid darkgray;
 }
 
 .file-border {
@@ -96,7 +96,7 @@ body {
 
 .file-thumb-border {
     background: url("../img/loading.gif") no-repeat center;
-    border: 1px solid white;
+    border: 1px solid darkgray;
 }
 
 .file-details {
