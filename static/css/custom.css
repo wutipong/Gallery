@@ -36,6 +36,12 @@ body {
     font-weight: bold;
 }
 
+.folder-thumb-name > img {
+    width: 1em;
+    height: 1em;
+    margin: 4px;
+}
+
 .folder-thumb {
     margin: auto;
 }
@@ -68,6 +74,12 @@ body {
     white-space: nowrap;
     overflow: hidden;
     z-index: 1;
+}
+
+.file-thumb-name > img {
+    width: 1em;
+    height: 1em;
+    margin: 4px;
 }
 
 .file-thumb {
