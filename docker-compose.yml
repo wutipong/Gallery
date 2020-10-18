@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  gallery:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    volumes:
+      - /mnt/storage1:/data
+    ports:
+      - "6969:80"
+    restart: "unless-stopped"
