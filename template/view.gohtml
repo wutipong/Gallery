@@ -49,7 +49,7 @@
             if(timer == null){
                 $('#auto').addClass('active');
                 let duration = $('#duration').children("option:selected").val();
-                myVar = setInterval(function(){
+                timer = setInterval(function(){
                      $('#carouselControl').carousel('next');
                 }, duration);
                 $('#duration').attr('disabled',true)
@@ -57,7 +57,7 @@
                 clearInterval(timer);
                 $('#auto').removeClass('active');
                 $('#duration').attr('disabled',false)
-                
+
                 timer = null;
             }
         })
