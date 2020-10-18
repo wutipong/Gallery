@@ -32,8 +32,6 @@
 
         $('#carouselControl').on('slide.bs.carousel', function (e) {
             $('#download-btn').attr("href", imgUrls[e.to])
-            var url = window.location.origin + window.location.pathname + "#" + (e.to +1);
-            history.pushState(null, '', url);
         })
 
         let indexStr = window.location.hash.substr(1);
@@ -45,6 +43,20 @@
 
         $(sel).addClass('active');
         $('#download-btn').attr("href", imgUrls[{{.StartIndex}} -1])
+
+        let timer = null;
+        $('#auto').click(function(){
+            if(timer == null){
+                $('#auto').addClass('active');
+                let duration = $('#duration').children("option:selected").val();
+                myVar = setInterval(function(){
+                     $('#carouselControl').carousel('next');
+                }, duration);
+            } else {
+                clearInterval(timer);
+                $('#auto').removeClass('active');
+            }
+        })
     });
     </script>
 </div>
@@ -54,12 +66,12 @@
     <div class="my-2 my-lg-0">
         <div class="input-group">
             <select id="duration" class="form-control">
-                <option>5 seconds</option>
-                <option selected>15 seconds</option>
-                <option>30 seconds</option>
-                <option>1 minute</option>
-                <option>5 minutes</option>
-                <option>15 minutes</option>
+                <option value="5000">5 seconds</option>
+                <option value="15000"selected>15 seconds</option>
+                <option value="30000">30 seconds</option>
+                <option value="60000">1 minute</option>
+                <option value="300000">5 minutes</option>
+                <option value="900000">15 minutes</option>
             </select>
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" id="auto"><img src="/static/img/play-fill.svg"></span></button>
