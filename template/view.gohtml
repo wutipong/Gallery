@@ -52,9 +52,13 @@
                 myVar = setInterval(function(){
                      $('#carouselControl').carousel('next');
                 }, duration);
+                $('#duration').attr('disabled',true)
             } else {
                 clearInterval(timer);
                 $('#auto').removeClass('active');
+                $('#duration').attr('disabled',false)
+                
+                timer = null;
             }
         })
     });
