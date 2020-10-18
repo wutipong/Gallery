@@ -51,13 +51,15 @@
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand mr-auto text-truncate h1">{{.Name}}</span>
-    <div class="my-2 my-lg-0">
-        <button class="btn" id="auto"><span class="oi oi-media-play"></span>Auto</button>
+    <div class="my-2 my-lg-0 input-group">
         <select id="duration">
             <option>5 seconds</option>
             <option selected>15 seconds</option>
             <option>30 seconds</option>
         </select>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" id="auto"><span class="oi oi-media-play"></span></button>
+        </div>
     </div>
     <div class="my-2 my-lg-0">
         <a id="download-btn" class="btn my-2 my-sm-0 btn-primary" download>Download</a>
