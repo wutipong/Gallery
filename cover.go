@@ -8,17 +8,20 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/nfnt/resize"
+
+	"facette.io/natsort"
 )
 
 var coverNames = []string{"cover", "model", "poster", "folder", "thumb"}
 
 func findCover(files []os.FileInfo) os.FileInfo {
-	var first os.FileInfo = nil
+	var filtered []os.FileInfo
 
 	for _, f := range files {
 		if f.IsDir() {
@@ -29,9 +32,7 @@ func findCover(files []os.FileInfo) os.FileInfo {
 			continue
 		}
 
-		if first == nil {
-			first = f
-		}
+		filtered = append(filtered, f)
 
 		name := strings.ToLower(f.Name())
 		for _, coverName := range coverNames {
@@ -41,7 +42,26 @@ func findCover(files []os.FileInfo) os.FileInfo {
 		}
 
 	}
-	return first
+
+	if len(filtered) == 0 {
+		return nil
+	}
+
+	sort.Slice(filtered, func(i, j int) bool {
+		return natsort.Compare(filtered[i].Name(), filtered[j].Name())
+	})
+
+	for _, f := range filtered {
+		name := strings.ToLower(f.Name())
+		for _, coverName := range coverNames {
+			if strings.Contains(name, coverName) {
+				return f
+			}
+		}
+
+	}
+
+	return filtered[0]
 }
 
 // GetCover returns a cover image with specific width/height while retains aspect ratio.
