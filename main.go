@@ -11,8 +11,8 @@ import (
 
 func main() {
 	address := flag.String("address", ":80", "The server address")
-	path := flag.String("path", "./data", "Image source path")
-	prefix := flag.String("prefix", "*", "Url prefix")
+	path := flag.String("data_path", "./data", "Image source path")
+	prefix := flag.String("url_prefix", "*", "Url prefix")
 
 	flag.Parse()
 
