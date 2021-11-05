@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
       args:
         buildno: 1
-    volumes:
-      - /mnt/storage3:/data
     ports:
-      - "6969:80"
+      - "8080:80"
     restart: "unless-stopped"
