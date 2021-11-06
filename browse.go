@@ -33,20 +33,13 @@ type browseData struct {
 	Title    string
 	NavItems []navItem
 	Files    []fileItem
-	Dirs     []folderItem
-}
-
-type folderItem struct {
-	Name     string
-	LinkURL  string
-	ThumbURL string
+	Dirs     []fileItem
 }
 
 type fileItem struct {
-	Name       string
-	Path       string
-	ImageURL   string
-	StartIndex int
+	Name     string
+	ThumbURL string
+	LinkURL  string
 }
 
 type navItem struct {
@@ -73,8 +66,8 @@ func createBreadcrumb(path string) []navItem {
 	return items
 }
 
-func createDirectoryItems(path string, dirs []FileEntry) []folderItem {
-	output := make([]folderItem, len(dirs))
+func createDirectoryItems(path string, dirs []FileEntry) []fileItem {
+	output := make([]fileItem, 0, len(dirs))
 	for i, dir := range dirs {
 		var url string
 		var thumbURL string
@@ -86,13 +79,14 @@ func createDirectoryItems(path string, dirs []FileEntry) []folderItem {
 			thumbURL = urlutil.CreateURL("/get_cover/", path, dir.Filename)
 		}
 
-		output[i] = folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL}
+		output[i] = fileItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL}
 	}
 	return output
 }
 
 func createFileItems(path string, files []FileEntry) []fileItem {
 	output := make([]fileItem, len(files))
+	viewURL := urlutil.CreateURL("view", path)
 	for i, file := range files {
 		var url string
 		if path == "" {
@@ -101,7 +95,12 @@ func createFileItems(path string, files []FileEntry) []fileItem {
 			url = urlutil.CreateURL("get_image", path, file.Filename)
 		}
 
-		output[i] = fileItem{Name: file.Filename, Path: path, ImageURL: url, StartIndex: i + 1}
+		index := i + 1
+		output[i] = fileItem{
+			Name:     file.Filename,
+			ThumbURL: url,
+			LinkURL:  fmt.Sprintf("%s#%d", viewURL, index),
+		}
 	}
 	return output
 }
