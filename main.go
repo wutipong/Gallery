@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/namsral/flag"
-	"github.com/wutipong/gallery/urlutil"
+	urlutil "github.com/wutipong/go-utils/url"
 )
 
 func main() {

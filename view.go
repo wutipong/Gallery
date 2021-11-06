@@ -11,11 +11,13 @@ import (
 	"text/template"
 
 	"github.com/labstack/echo/v4"
+	urlutil "github.com/wutipong/go-utils/url"
 )
 
 func init() {
 	var err error
 	viewTemplate, err = template.New("view.gohtml").
+		Funcs(urlutil.TextTemplateFuncMap()).
 		ParseFiles(
 			"template/view.gohtml",
 			"template/header.gohtml",
@@ -55,9 +57,9 @@ func view(c echo.Context) error {
 	}
 
 	data := viewData{
-		Name: 		p,
+		Name:       p,
 		Title:      fmt.Sprintf("Gallery - Viewing [%s]", p),
-		BrowseURL:  "/browse/" + p,
+		BrowseURL:  urlutil.CreateURL("/browse/", p),
 		ImageURLs:  createImageURLs(p, files),
 		StartIndex: startIndex,
 	}
@@ -75,9 +77,9 @@ func createImageURLs(path string, files []FileEntry) []string {
 	for i, file := range files {
 		var url string
 		if path == "" {
-			url = "/get_image/" + file.Filename
+			url = urlutil.CreateURL("/get_image/", file.Filename)
 		} else {
-			url = "/get_image/" + path + "/" + file.Filename
+			url = urlutil.CreateURL("/get_image/", path, file.Filename)
 		}
 
 		output[i] = url
