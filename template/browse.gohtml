@@ -1,5 +1,5 @@
 {{template "html-head" .}}
-
+<body>
 <nav claPs="navbar navbar-dark bg-dark sticky-top navbar-expand-lg">
    <ol class="breadcrumb mr-auto">
         {{range .NavItems}}
@@ -50,3 +50,7 @@
     {{end}}
     </div>
 </div>
+
+<script src='{{CreateURL "/static/index.js"}}'></script>
+
+</body>

@@ -1,0 +1,30 @@
+{
+  "name": "gallery",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "npx rimraf build",
+    "build": "parcel build --dist-dir=./static ./static-src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wutipong/gallery.git"
+  },
+  "author": "Wutipong Wongsakuldej",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wutipong/gallery/issues"
+  },
+  "homepage": "https://github.com/wutipong/gallery",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0",
+    "parcel": "^2.0.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "bootstrap-icons": "^1.7.0",
+    "bootswatch": "^4.4.1",
+    "jquery": "^3.6.0"
+  }
+}

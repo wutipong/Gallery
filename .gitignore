@@ -3,3 +3,5 @@ gallery
 .vscode/launch.json
 go.sum
 *.bak
+node_modules
+.parcel-cache
