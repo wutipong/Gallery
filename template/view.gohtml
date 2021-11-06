@@ -20,7 +20,7 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-    
+
     <script src='{{CreateURL "/static/index.js"}}'></script>
     <script>
     $(function() {
@@ -80,13 +80,13 @@
                 <option value="900000">15 minutes</option>
             </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" id="auto"><img src='{{CreateURL "/static/img/play-fill.svg" }}'></span></button>
+                <button class="btn btn-outline-secondary" id="auto"> <i class="bi bi-play"></i></button>
             </div>
         </div>
     </div>
     <div class="my-2 my-lg-0">
-        <a id="download-btn" class="btn my-2 my-sm-0 btn-primary" download>Download</a>
-        <a id="close-btn" class="btn btn-danger" href="{{.BrowseURL}}"> Close</a>
+        <a id="download-btn" class="btn my-2 my-sm-0 btn-primary" download><i class="bi bi-download"></i>&nbsp;Download</a>
+        <a id="close-btn" class="btn btn-danger" href="{{.BrowseURL}}"><i class="bi bi-x"></i>&nbsp;Close</a>
     </div>
 </nav>
 
