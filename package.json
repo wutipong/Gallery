@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "npx rimraf build",
+    "prebuild": "npx rimraf static",
     "build": "parcel build --dist-dir=./static ./static-src/index.js"
   },
   "repository": {
