@@ -96,9 +96,9 @@ func createFileItems(path string, files []FileEntry) []fileItem {
 	for i, file := range files {
 		var url string
 		if path == "" {
-			url = urlutil.CreateURL(file.Filename)
+			url = urlutil.CreateURL("get_image", file.Filename)
 		} else {
-			url = urlutil.CreateURL(path, file.Filename)
+			url = urlutil.CreateURL("get_image", path, file.Filename)
 		}
 
 		output[i] = fileItem{Name: file.Filename, Path: path, ImageURL: url, StartIndex: i + 1}

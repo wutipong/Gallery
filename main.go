@@ -20,8 +20,8 @@ func main() {
 
 	BaseDirectory = *dataPath
 
-	log.Printf("Image Source Path: %s", *dataPath)
-	log.Printf("using prefix %s", *prefix)
+	log.Printf("Image source Path: %s", *dataPath)
+	log.Printf("Using prefix %s", *prefix)
 	// Echo instance
 	e := echo.New()
 
@@ -41,7 +41,7 @@ func main() {
 	}
 
 	// Routes
-	e.GET("/", hello)
+	e.GET("/", root)
 	e.GET("/browse", browse)
 	e.GET("/browse/*", browse)
 
@@ -63,6 +63,6 @@ func main() {
 }
 
 // Handler
-func hello(c echo.Context) error {
-	return c.Redirect(http.StatusPermanentRedirect, "/browse")
+func root(c echo.Context) error {
+	return c.Redirect(http.StatusPermanentRedirect, urlutil.CreateURL("/browse"))
 }
