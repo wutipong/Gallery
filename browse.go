@@ -67,7 +67,7 @@ func createBreadcrumb(path string) []navItem {
 }
 
 func createDirectoryItems(path string, dirs []FileEntry) []fileItem {
-	output := make([]fileItem, 0, len(dirs))
+	output := make([]fileItem, len(dirs))
 	for i, dir := range dirs {
 		var url string
 		var thumbURL string
