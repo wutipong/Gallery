@@ -93,7 +93,7 @@ func GetCover(c echo.Context) error {
 	cover := findCover(children)
 
 	if cover == nil {
-		return c.File("static/img/notfound_thumb.png")
+		return c.File("resource/notfound_thumb.png")
 	}
 
 	coverPath := fullpath + string(os.PathSeparator) + cover.Name()
