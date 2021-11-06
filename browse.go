@@ -10,11 +10,13 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/wutipong/gallery/urlutil"
 )
 
 func init() {
 	var err error
 	broseTemplate, err = template.New("browse.gohtml").
+		Funcs(urlutil.TemplateFuncMap()).
 		ParseFiles(
 			"template/browse.gohtml",
 			"template/header.gohtml",
@@ -57,14 +59,14 @@ func createBreadcrumb(path string) []navItem {
 
 	items = append(items, navItem{
 		Name: "Home",
-		URL:  "/browse",
+		URL:  urlutil.CreateURL("/browse"),
 	})
 	if path != "" {
 		parts := strings.Split(path, "/")
 		for i, part := range parts {
 			items = append(items, navItem{
 				Name: part,
-				URL:  "/browse/" + PathLevel(path, i+1),
+				URL:  urlutil.CreateURL("/browse/", PathLevel(path, i+1)),
 			})
 		}
 	}
@@ -77,11 +79,11 @@ func createDirectoryItems(path string, dirs []FileEntry) []folderItem {
 		var url string
 		var thumbURL string
 		if path == "" {
-			url = "/browse/" + dir.Filename
-			thumbURL = "/get_cover/" + dir.Filename
+			url = urlutil.CreateURL("/browse/", dir.Filename)
+			thumbURL = urlutil.CreateURL("/get_cover/", dir.Filename)
 		} else {
-			url = "/browse/" + path + "/" + dir.Filename
-			thumbURL = "/get_cover/" + path + "/" + dir.Filename
+			url = urlutil.CreateURL("/browse/", path, dir.Filename)
+			thumbURL = urlutil.CreateURL("/get_cover/", path, dir.Filename)
 		}
 
 		output[i] = folderItem{Name: dir.Filename, LinkURL: url, ThumbURL: thumbURL}
@@ -94,9 +96,9 @@ func createFileItems(path string, files []FileEntry) []fileItem {
 	for i, file := range files {
 		var url string
 		if path == "" {
-			url = file.Filename
+			url = urlutil.CreateURL(file.Filename)
 		} else {
-			url = path + "/" + file.Filename
+			url = urlutil.CreateURL(path, file.Filename)
 		}
 
 		output[i] = fileItem{Name: file.Filename, Path: path, ImageURL: url, StartIndex: i + 1}

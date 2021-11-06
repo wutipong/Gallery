@@ -3,22 +3,24 @@ package main
 import (
 	"log"
 	"net/http"
+	"path"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/namsral/flag"
+	"github.com/wutipong/gallery/urlutil"
 )
 
 func main() {
 	address := flag.String("address", ":80", "The server address")
-	path := flag.String("data_path", "./data", "Image source path")
-	prefix := flag.String("url_prefix", "*", "Url prefix")
+	dataPath := flag.String("data_path", "./data", "Image source path")
+	prefix := flag.String("url_prefix", "", "Url prefix")
 
 	flag.Parse()
 
-	BaseDirectory = *path
+	BaseDirectory = *dataPath
 
-	log.Printf("Image Source Path: %s", *path)
+	log.Printf("Image Source Path: %s", *dataPath)
 	log.Printf("using prefix %s", *prefix)
 	// Echo instance
 	e := echo.New()
@@ -28,9 +30,15 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.Pre(middleware.RemoveTrailingSlash())
-	e.Pre(middleware.Rewrite(map[string]string{
-		*prefix: "$1",
-	}))
+	if *prefix != "" {
+		pattern := path.Join(*prefix, "*")
+		e.Pre(middleware.Rewrite(map[string]string{
+			*prefix: "/",
+			pattern: "/$1",
+		}))
+
+		urlutil.SetPrefix(*prefix)
+	}
 
 	// Routes
 	e.GET("/", hello)
