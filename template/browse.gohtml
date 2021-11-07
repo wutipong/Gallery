@@ -23,12 +23,12 @@
     <div class="d-block">
         <div class="card">
             <div class="card-body">
+                <h5 class="card-title"><a href='{{.LinkURL}}'><i class="bi bi-file-image"></i>&nbsp;{{.Name}}</a></h5>
                 <div class="card-text">
-                    <a href='{{.LinkURL}}'>
-                        <img class="card-img" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
+                    <a class="file-thumb-border" href='{{.LinkURL}}'>
+                        <img class="card-img file-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
                     </a>
                 </div>
-                <h5 class="card-title"><a href='{{.LinkURL}}'><i class="bi bi-file-image"></i>&nbsp;{{.Name}}</a></h5>
                 <span class="d-none">
                     <i class="bi bi-heart-fill text-pink-500"></i>
                     <i class="bi bi-exclamation-circle-fill text-yellow-500"></i>
