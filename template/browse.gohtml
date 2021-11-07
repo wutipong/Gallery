@@ -1,3 +1,43 @@
+{{define "folder-item"}}
+    <div class="card mb-3">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <a href="{{.LinkURL}}">
+                    <img class="card-img" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-folder"></i>&nbsp;{{.Name}}</h5>
+                    <span class="d-none">
+                        <i class="bi bi-heart-fill text-pink-500"></i>
+                        <i class="bi bi-exclamation-circle-fill text-yellow-500"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "file-item"}}
+    <div class="d-block">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-text">
+                    <a href='{{.LinkURL}}'>
+                        <img class="card-img" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
+                    </a>
+                </div>
+                <h5 class="card-title"><i class="bi bi-file-image"></i>&nbsp;{{.Name}}</h5>
+                <span class="d-none">
+                    <i class="bi bi-heart-fill text-pink-500"></i>
+                    <i class="bi bi-exclamation-circle-fill text-yellow-500"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+{{end}}
+
 {{template "html-head" .}}
 <body>
 <nav claPs="navbar navbar-dark bg-dark sticky-top navbar-expand-lg">
@@ -17,31 +57,25 @@
     </div>
 </nav>
 
-<div class="folder-container">
-    {{range .Dirs}}
-        <a href="{{.LinkURL}}">
-            <div class="folder-border">
-                <div class="folder-thumb-border">
-                    <img class="folder-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
-                </div>
-                <span class="folder-thumb-name"><i class="bi bi-folder"></i>&nbsp;{{.Name}}</span>
-            </div>
-        </a>
-    {{end}}
-</div>
+{{if .Dirs}} 
+    <h2>Sub-directories</h2>
 
-<div class="file-container">
-    {{range .Files }}
-        <a href='{{.LinkURL}}'>
-            <div class="file-border">
-                <div class="file-thumb-border">
-                    <img class="file-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
-                </div>
-                <span class="file-thumb-name"><i class="bi bi-file-image"></i>&nbsp;{{.Name}}</span>
-            </div>
-        </a>
-    {{end}}
-</div>
+    <div class="folder-container">
+        {{range .Dirs}}
+            {{template "folder-item" .}}
+        {{end}}
+    </div>
+{{end}}
+
+{{if .Files}}
+    <h2>Images</h2>
+
+    <div class="file-container">
+        {{range .Files }}
+        {{template "file-item" .}}
+        {{end}}
+    </div>
+{{end}}
 
 <script src='{{CreateURL "/static/index.js"}}'></script>
 
