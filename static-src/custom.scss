@@ -1,4 +1,7 @@
-@import "../node_modules/bootswatch/dist/darkly/bootstrap.min.css";
+@import "~bootswatch/dist/darkly/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/darkly/bootswatch";
+
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 body {
@@ -13,30 +16,53 @@ body {
     right: 0px;
 }
 
+.folder-container {
+    display: grid;
+    grid-template-columns: auto;
+}
+
+@include media-breakpoint-up(lg) {
+    .folder-container {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    .folder-container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+}
+
 .folder-border {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 220px;
     height: 250px;
     margin: 20px;
     background: black;
     padding: 2px;
-    border-style: double;
+    border-style: solid;
     border-color: gray;
-    border-radius: 4px;
-    border-width: 4px;
+    border-radius: 6px;
+    border-width: 6px;
+}
+
+@include media-breakpoint-up(sm) {
+    .folder-border {
+        flex-direction: row;
+    }
 }
 
 .folder-thumb-name {
-    margin-top: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
     z-index: 1;
-    text-align: center;
     font-weight: bold;
+    margin: 4px;
 }
 
 .folder-thumb-name > img {
@@ -59,9 +85,28 @@ body {
     border: 1px solid darkgray;
 }
 
+.file-container {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+@include media-breakpoint-up(lg) {
+    .file-container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    .file-container {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+    }
+}
+
 .file-border {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     width: auto;
     height: 250px;

@@ -17,38 +17,30 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="row">
+<div class="folder-container">
     {{range .Dirs}}
-        <div class="col">
-            <a href="{{.LinkURL}}">
-                <div class="folder-border">
-                    <div class="folder-thumb-border">
-                        <img class="folder-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
-                    </div>
-                    <span class="folder-thumb-name"><i class="bi bi-folder"></i>&nbsp;{{.Name}}</span>
+        <a href="{{.LinkURL}}">
+            <div class="folder-border">
+                <div class="folder-thumb-border">
+                    <img class="folder-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
                 </div>
-            </a>
-        </div>
+                <span class="folder-thumb-name"><i class="bi bi-folder"></i>&nbsp;{{.Name}}</span>
+            </div>
+        </a>
     {{end}}
-    </div>
 </div>
 
-<div class="container">
-    <div class="row">
+<div class="file-container">
     {{range .Files }}
-        <div class="col">
-            <a href='{{.LinkURL}}'>
-                <div class="file-border">
-                    <div class="file-thumb-border">
-                        <img class="file-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
-                    </div>
-                    <span class="file-thumb-name"><i class="bi bi-file-image"></i>&nbsp;{{.Name}}</span>
+        <a href='{{.LinkURL}}'>
+            <div class="file-border">
+                <div class="file-thumb-border">
+                    <img class="file-thumb" loading="lazy" src="{{.ThumbURL}}?width=200" alt="{{.Name}}">
                 </div>
-            </a>
-        </div>
+                <span class="file-thumb-name"><i class="bi bi-file-image"></i>&nbsp;{{.Name}}</span>
+            </div>
+        </a>
     {{end}}
-    </div>
 </div>
 
 <script src='{{CreateURL "/static/index.js"}}'></script>
